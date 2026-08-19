@@ -1,4 +1,7 @@
-from django.shortcuts import redirect
+from django.http import JsonResponse
 
-def index(request):
-    return redirect('/todos')
+
+def ml_predict(request):
+    return JsonResponse({
+        "prediction": 0
+    })
