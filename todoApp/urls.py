@@ -7,7 +7,7 @@ from . import settings, views
 
 
 urlpatterns = [
-    path('todos/', include('todos.urls')),
+    path('', include('todos.urls')),
     path('admin/', admin.site.urls),
     path('ml-predict/', views.ml_predict),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
