@@ -30,7 +30,7 @@ ALLOWED_HOSTS = ["18.204.226.38", "localhost", "127.0.0.1"]
 
 # Application definition
 
-INSTALLED_APPS = [
+INSTALLED_APPS = 
     'todos.apps.TodosConfig',
     'django.contrib.admin',
     'django.contrib.auth',
