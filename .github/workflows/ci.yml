@@ -50,10 +50,9 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd ~/django_todo_cicd
-            git pull origin develop
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
 
-            docker build -t django-mlops .
+            docker pull mayuri719/django-todo-app:latest
 
             docker stop django-todo || true
             docker rm django-todo || true
@@ -61,4 +60,5 @@ jobs:
             docker run -d \
               --name django-todo \
               -p 8000:8000 \
-              django-mlops
+              mayuri719/django-todo-app:latest
+
