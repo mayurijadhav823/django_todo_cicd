@@ -34,12 +34,30 @@ jobs:
         run: |
           python manage.py test
 
+  build-and-push:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
       - name: Build Docker image
         run: |
-          docker build -t django-mlops .
+          docker build -t mayuri719/django-mlops:latest .
+
+      - name: Push Docker image
+        run: |
+          docker push mayuri719/django-mlops:latest
 
   deploy:
-    needs: test
+    needs: build-and-push
     runs-on: ubuntu-latest
 
     steps:
@@ -50,9 +68,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
-
-            docker pull mayuri719/django-todo-app:latest
+            docker pull mayuri719/django-mlops:latest
 
             docker stop django-todo || true
             docker rm django-todo || true
@@ -60,5 +76,4 @@ jobs:
             docker run -d \
               --name django-todo \
               -p 8000:8000 \
-              mayuri719/django-todo-app:latest
-
+              mayuri719/django-mlops:latest
